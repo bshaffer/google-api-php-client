@@ -15,7 +15,9 @@ $iterator = Finder::create()
     ->in($projectRoot);
 
 $versions = GitVersionCollection::create($projectRoot)
-    ->addFromTags('v1.*')
+    ->addFromTags(function($tag) {
+        return 0 === strpos($tag, 'v2.') && false === strpos($tag, 'RC');
+    })
     ->add('master', 'master branch');
 
 return new Sami($iterator, [
